@@ -2,14 +2,18 @@
   "manifest_version": 2,
 
   "name": "Yammer Desktop Notifications",
+  "short_name": "Yammer Notifications",
   "description": "Desktop notifications for new Yammer messages",
   "version": "1.0.4",
+  "author": "Jan Baykara <jan@baykara.co.uk>",
+  "homepage_url": "https://github.com/janbaykara/Chrome-YammerMessageNotifications",
+  "icons": { "128": "img/icon128.png" },
   
   "background": {
     "scripts": [
-      "lodash.js", 
-      "jquery.js",
-      "background.js"
+      "deps/lodash.js", 
+      "deps/jquery.js",
+      "lib/background.js"
     ],
     "persistent": true
   },
