@@ -24,14 +24,17 @@ chrome.webRequest.onCompleted.addListener(function(req) {
         lastURL !== req.url
     ) {
         $.get(req.url+"&"+ignoreToken, function(res) {
+            var msg = res.data.messages[0];
             if (
                 res.type === "message" &&
-                res.data.messages[0].id !== lastMsg &&
-                res.data.messages[0].sender_id != yammer_uid
+                msg.id !== lastMsg &&
+                msg.sender_id != yammer_uid &&
+                // _.any(res.data.references,{'direct_message': true})
+                msg.message_type === 'chat'
             ) {
                 console.log(yammer_uid)
                 messageHandler(res)
-                lastMsg = res.data.messages[0].id
+                lastMsg = msg.id
             }
         })
     }
