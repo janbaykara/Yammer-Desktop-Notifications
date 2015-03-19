@@ -64,9 +64,7 @@ function messageHandler(res) {
 function notificationHandler(message) {
     console.log("You got mail!")
 
-    var buttonsArr = [
-        { title: "Read & reply" }
-    ]
+    var buttonsArr = [];
     if(typeof yammer_uid === 'undefined') {
         buttonsArr.push({ title: "Don't notify me about myself!" })
     }
@@ -92,14 +90,19 @@ function notificationHandler(message) {
 }
 
 function notificationButtonHandler(notificationId,message) {
+    // Save user ID
     chrome.notifications.onButtonClicked.addListener(function(id, btn) {
-        if (id === notificationId && btn === 0) {
+        if(id === notificationId && btn === 0) {
+            chrome.storage.sync.set({"yammer_uid":message.person.id}, getUserID)
+        }
+    })
+    // Go to message
+    chrome.notifications.onClicked.addListener(function(id) {
+        if (id === notificationId) {
             chrome.tabs.create({
                 url: message.web_url,
                 selected: true
             })
-        } else if(btn === 1) {
-            chrome.storage.sync.set({"yammer_uid":message.person.id}, getUserID)
         }
     })
 }

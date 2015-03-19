@@ -3,7 +3,7 @@
 
   "name": "Yammer Desktop Notifications",
   "description": "Desktop notifications for new Yammer messages",
-  "version": "1.0.1",
+  "version": "1.0.3",
   
   "background": {
     "scripts": [
