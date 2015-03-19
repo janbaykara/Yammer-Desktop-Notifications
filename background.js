@@ -8,6 +8,8 @@ var lastMsg
 var ignoreToken = "ignore_request"
 var yammer_uid
 
+// chrome.storage.sync.clear() // debug
+
 function getUserID() {
     chrome.storage.sync.get('yammer_uid', function(storage) {
         yammer_uid = storage.yammer_uid
@@ -24,7 +26,7 @@ chrome.webRequest.onCompleted.addListener(function(req) {
         lastURL !== req.url
     ) {
         $.get(req.url+"&"+ignoreToken, function(res) {
-            var msg = res.data.messages[0];
+            var msg = res.data.messages[0]
             if (
                 res.type === "message" &&
                 msg.id !== lastMsg &&
