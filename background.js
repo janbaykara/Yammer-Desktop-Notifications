@@ -52,6 +52,8 @@ function messageHandler(res) {
     message.person.mugshot_url_template = message.person.mugshot_url_template.replace("{height}", imgSize)
     message.person.mugshot_url_template = message.person.mugshot_url_template.replace("{width}", imgSize)
     message.person.img_url = message.person.mugshot_url_template
+    message.unix_time = Date.parse(message.created_at)
+    message.date_object = new Date(message.unix_time)
 
     message.notification_id = "boom-yammer-osx-" + _.uniqueId()
     notificationHandler(message)
@@ -74,7 +76,7 @@ function notificationHandler(message) {
         {
             type: "basic",
             iconUrl: message.person.img_url,
-            contextMessage: "Message received "+message.created_at,
+            contextMessage: "at "+message.date_object.toLocaleTimeString(),
             title: message.person.full_name + " yammer'd you",
             message: message.body.plain,
             isClickable: true,
