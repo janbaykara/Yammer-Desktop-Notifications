@@ -7,6 +7,13 @@ var lastURL
 var lastMsg
 var ignoreToken = "ignore_request"
 var yammer_uid
+
+function getUserID() {
+    chrome.storage.sync.get('yammer_uid', function(storage) {
+        yammer_uid = storage.yammer_uid
+        console.log("User ID is "+yammer_uid)
+    })
+}
 getUserID()
 
 chrome.webRequest.onCompleted.addListener(function(req) {
@@ -22,6 +29,7 @@ chrome.webRequest.onCompleted.addListener(function(req) {
                 res.data.messages[0].id !== lastMsg &&
                 res.data.messages[0].sender_id != yammer_uid
             ) {
+                console.log(yammer_uid)
                 messageHandler(res)
                 lastMsg = res.data.messages[0].id
             }
@@ -51,7 +59,7 @@ function notificationHandler(message) {
     var buttonsArr = [
         { title: "Read & reply" }
     ]
-    if(yammer_uid < 3) {
+    if(typeof yammer_uid === 'undefined') {
         buttonsArr.push({ title: "Don't notify me about myself!" })
     }
 
@@ -84,15 +92,7 @@ function notificationButtonHandler(notificationId,message) {
                 selected: true
             })
         } else if(btn === 1) {
-            me = message.person.id
-            chrome.storage.sync.set({"yammer_uid":me}, getUserID)
+            chrome.storage.sync.set({"yammer_uid":message.person.id}, getUserID)
         }
     })
-}
-
-function getUserID() {
-    chrome.storage.sync.get('yammer_uid', function(storage) {
-        yammer_uid = storage.yammer_uid || 2
-    })
-    chrome.storage.sync.clear()
 }

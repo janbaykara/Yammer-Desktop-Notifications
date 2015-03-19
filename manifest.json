@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "Yammer Browser Notifications",
-  "description": "Listens for new yammer messages, and notifies you. Duh?",
-  "version": "1.0",
+  "name": "Yammer Desktop Notifications",
+  "description": "Desktop notifications for new Yammer messages",
+  "version": "1.0.1",
   
   "background": {
     "scripts": [
