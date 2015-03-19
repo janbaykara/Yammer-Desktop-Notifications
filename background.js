@@ -55,6 +55,7 @@ function messageHandler(res) {
 }
 
 function notificationHandler(message) {
+    console.log("You got mail!")
 
     var buttonsArr = [
         { title: "Read & reply" }
@@ -84,7 +85,6 @@ function notificationHandler(message) {
 }
 
 function notificationButtonHandler(notificationId,message) {
-    console.log("You got mail!")
     chrome.notifications.onButtonClicked.addListener(function(id, btn) {
         if (id === notificationId && btn === 0) {
             chrome.tabs.create({
