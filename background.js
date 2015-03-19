@@ -10,13 +10,14 @@ var yammer_uid
 
 // chrome.storage.sync.clear() // debug
 
-function getUserID() {
+function getUserID(cb) {
     chrome.storage.sync.get('yammer_uid', function(storage) {
         yammer_uid = storage.yammer_uid
         console.log("User ID is "+yammer_uid)
+        if(typeof cb === 'function') cb();
     })
 }
-getUserID()
+getUserID();
 
 chrome.webRequest.onCompleted.addListener(function(req) {
     if (
@@ -26,22 +27,32 @@ chrome.webRequest.onCompleted.addListener(function(req) {
         lastURL !== req.url
     ) {
         $.get(req.url+"&"+ignoreToken, function(res) {
-            var msg = res.data.messages[0]
-            if (
-                res.type === "message" &&
-                msg.id !== lastMsg &&
-                msg.sender_id != yammer_uid &&
-                // _.any(res.data.references,{'direct_message': true})
-                msg.message_type === 'chat'
-            ) {
-                console.log(yammer_uid)
-                messageHandler(res)
-                lastMsg = msg.id
-            }
+            if(typeof yammer_uid === 'undefined') {
+                chrome.storage.sync.set(
+                    {"yammer_uid": res.data.meta.current_user_id},
+                    getUserID(function() {
+                        validateHTTPRequest(res)
+                    })
+                );
+            } else validateHTTPRequest(res);
         })
     }
     lastURL = req.url
 }, {urls: ["https://www.yammer.com/*"]})
+
+function validateHTTPRequest(res) {
+    var msg = res.data.messages[0]
+    if (
+        res.type === "message" &&
+        msg.message_type === 'chat' &&
+        typeof yammer_uid !== 'undefined' &&
+        msg.sender_id != yammer_uid &&
+        msg.id !== lastMsg
+    ) {
+        messageHandler(res)
+        lastMsg = msg.id
+    }
+}
 
 function messageHandler(res) {
     var message = res.data.messages[0]
@@ -58,44 +69,29 @@ function messageHandler(res) {
     message.date_object = new Date(message.unix_time)
 
     message.notification_id = "boom-yammer-osx-" + _.uniqueId()
-    notificationHandler(message)
+    notificationCreator(message)
 }
 
-function notificationHandler(message) {
+function notificationCreator(message) {
     console.log("You got mail!")
 
-    var buttonsArr = [];
-    if(typeof yammer_uid === 'undefined') {
-        buttonsArr.push({ title: "Don't notify me about myself!" })
-    }
-
     chrome.notifications.create(
-        // notificationId
         message.notification_id,
-        // NotificationOptions
         {
             type: "basic",
             iconUrl: message.person.img_url,
             contextMessage: "at "+message.date_object.toLocaleTimeString(),
             title: message.person.full_name + " yammer'd you",
             message: message.body.plain,
-            isClickable: true,
-            buttons: buttonsArr
+            isClickable: true
         },
-        // Callback
         function callback(notificationId) {
-            notificationButtonHandler(notificationId,message)
+            notificationEventHandler(notificationId,message)
         }
     )
 }
 
-function notificationButtonHandler(notificationId,message) {
-    // Save user ID
-    chrome.notifications.onButtonClicked.addListener(function(id, btn) {
-        if(id === notificationId && btn === 0) {
-            chrome.storage.sync.set({"yammer_uid":message.person.id}, getUserID)
-        }
-    })
+function notificationEventHandler(notificationId,message) {
     // Go to message
     chrome.notifications.onClicked.addListener(function(id) {
         if (id === notificationId) {
