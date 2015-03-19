@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+
+  "name": "Yammer Browser Notifications",
+  "description": "Listens for new yammer messages, and notifies you. Duh?",
+  "version": "1.0",
+  
+  "background": {
+    "scripts": [
+      "lodash.js", 
+      "jquery.js",
+      "background.js"
+    ],
+    "persistent": true
+  },
+
+  "permissions": [
+    "storage",
+    "webRequest",
+    "activeTab",
+    "tabs",
+    "notifications",
+    "<all_urls>"
+  ]
+}
