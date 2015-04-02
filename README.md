@@ -4,4 +4,4 @@ A simple Chrome extension that listens for new messages in Yammer, and spits the
 
 Go download it [here](https://chrome.google.com/webstore/detail/yammer-desktop-notificati/iindcdobedibkdfobnggailnihfmihlf "Chrome App Store").
 
-![Screenshot](https://github.com/janbaykara/Chrome-YammerMessageNotifications/blob/master/img/screenshot-01.png)
+![Screenshot](https://github.com/janbaykara/Chrome-YammerMessageNotifications/blob/master/img/640x400.png)
