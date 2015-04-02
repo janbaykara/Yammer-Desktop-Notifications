@@ -4,7 +4,7 @@
   "name": "Yammer Desktop Notifications",
   "short_name": "Yammer Notifications",
   "description": "Desktop notifications for new Yammer messages",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Jan Baykara <jan@baykara.co.uk>",
   "homepage_url": "https://github.com/janbaykara/Chrome-YammerMessageNotifications",
   "icons": { "128": "img/icon128.png" },
