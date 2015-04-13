@@ -4,7 +4,7 @@
   "name": "Yammer Desktop Notifier",
   "short_name": "Yammer Notifier",
   "description": "Yammer Desktop Notifier provides desktop notifications when you receive new private Yammer chat messages.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Jan Baykara <jan@baykara.co.uk>",
   "homepage_url": "https://github.com/janbaykara/Chrome-YammerMessageNotifications",
   "icons": { "128": "img/icon128.png" },
@@ -13,7 +13,10 @@
     "scripts": [
       "deps/lodash.js", 
       "deps/jquery.js",
-      "lib/background.js"
+      "lib/background.config.js",
+      "lib/background.detectors.js",
+      "lib/background.messenger.js",
+      "lib/background.init.js"
     ],
     "persistent": true
   },
