@@ -22,10 +22,12 @@
         "scripts": [
             "deps/lodash.js",
             "deps/jquery.js",
+            "lib/Session.js",
             "lib/background.config.js",
             "lib/background.detectors.js",
             "lib/background.messenger.js",
-            "lib/background.init.js"
+            "lib/background.init.js",
+            "lib/background.ui.js"
         ],
         "persistent": true
     },
